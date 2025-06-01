@@ -2,11 +2,14 @@
 cmake_minimum_required(VERSION 3.22)
 project(Hikari-Obf-LLVM18-NDK27)
 
+# Uncomment the appropriate architecture for your builds
 set(CMAKE_OSX_ARCHITECTURES x86_64)
 # set(CMAKE_OSX_ARCHITECTURES arm64)
 
 set(CMAKE_C_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r522817/bin/clang)
 set(CMAKE_CXX_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r522817/bin/clang++)
+
+# Set LLVM_HOME so that find_package(LLVM) can locate LLVMConfig.cmake.
 set(ENV{LLVM_HOME} ${CMAKE_CURRENT_LIST_DIR}/clang-r522817)
 
 if (NOT DEFINED ENV{LLVM_HOME})
@@ -28,4 +31,4 @@ add_compile_definitions(ENDIAN_LITTLE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 set(CMAKE_SKIP_RPATH ON)
 
-add_subdirectory(Hikari)
+add_subdirectory(Obfuscation)
