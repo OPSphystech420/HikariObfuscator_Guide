@@ -15,7 +15,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "llvm/Transforms/Obfuscation/ConstantEncryption.h"
+#include "ConstantEncryption.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/InstIterator.h"
@@ -23,10 +23,10 @@
 #include "llvm/IR/IntrinsicInst.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/NoFolder.h"
-#include "llvm/Transforms/Obfuscation/CryptoUtils.h"
-#include "llvm/Transforms/Obfuscation/SubstituteImpl.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
-#include "llvm/Transforms/Obfuscation/compat/CallSite.h"
+#include "CryptoUtils.h"
+#include "SubstituteImpl.h"
+#include "Utils.h"
+#include "compat/CallSite.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <unordered_set>
 

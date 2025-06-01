@@ -1,16 +1,16 @@
 // For open-source license, please refer to
 // [License](https://github.com/HikariObfuscator/Hikari/wiki/License).
 //===----------------------------------------------------------------------===//
-#include "llvm/Transforms/Obfuscation/StringEncryption.h"
+#include "StringEncryption.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/InstIterator.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/NoFolder.h"
 #include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Obfuscation/CryptoUtils.h"
-#include "llvm/Transforms/Obfuscation/Obfuscation.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
+#include "CryptoUtils.h"
+#include "Obfuscation.h"
+#include "Utils.h"
 #include <unordered_set>
 
 using namespace llvm;

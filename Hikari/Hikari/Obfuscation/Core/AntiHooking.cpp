@@ -33,10 +33,10 @@
 #else
 #include "llvm/ADT/Triple.h"
 #endif
-#include "llvm/Transforms/Obfuscation/AntiHook.h"
-#include "llvm/Transforms/Obfuscation/CryptoUtils.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
-#include "llvm/Transforms/Obfuscation/compat/CallSite.h"
+#include "AntiHook.h"
+#include "CryptoUtils.h"
+#include "Utils.h"
+#include "compat/CallSite.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <fstream>
 

@@ -3,7 +3,7 @@
 //===----------------------------------------------------------------------===//
 /*
   For maximum usability. We provide two modes for this pass, as defined in
-  llvm/Transforms/Obfuscation/AntiClassDump.h THIN mode is used on per-module
+  AntiClassDump.h THIN mode is used on per-module
   basis without LTO overhead and structs are left in the module where possible.
   This is particularly useful for cases where LTO is not possible. For example
   static library. Full mode is used at LTO stage, this mode constructs
@@ -12,7 +12,7 @@
   This pass only provides thin mode
 */
 
-#include "llvm/Transforms/Obfuscation/AntiClassDump.h"
+#include "AntiClassDump.h"
 #if LLVM_VERSION_MAJOR >= 17
 #include "llvm/TargetParser/Triple.h"
 #else
@@ -26,7 +26,7 @@
 #include "llvm/IR/Value.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
+#include "Utils.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <deque>
 #include <map>

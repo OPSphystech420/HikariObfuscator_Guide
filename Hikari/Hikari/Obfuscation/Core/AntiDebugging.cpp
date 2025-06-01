@@ -15,7 +15,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "llvm/Transforms/Obfuscation/AntiDebugging.h"
+#include "AntiDebugging.h"
 #if LLVM_VERSION_MAJOR >= 17
 #include "llvm/ADT/SmallString.h"
 #include "llvm/TargetParser/Triple.h"
@@ -32,8 +32,8 @@
 #include "llvm/Support/Path.h"
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Obfuscation/CryptoUtils.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
+#include "CryptoUtils.h"
+#include "Utils.h"
 #include <fstream>
 
 using namespace llvm;

@@ -1,14 +1,14 @@
 // For open-source license, please refer to
 // [License](https://github.com/HikariObfuscator/Hikari/wiki/License).
 //===----------------------------------------------------------------------===//
-#include "llvm/Transforms/Obfuscation/Substitution.h"
+#include "Substitution.h"
 #include "llvm/ADT/Statistic.h"
 #include "llvm/IR/InstIterator.h"
 #include "llvm/IR/Intrinsics.h"
 #include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Obfuscation/CryptoUtils.h"
-#include "llvm/Transforms/Obfuscation/SubstituteImpl.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
+#include "CryptoUtils.h"
+#include "SubstituteImpl.h"
+#include "Utils.h"
 
 using namespace llvm;
 

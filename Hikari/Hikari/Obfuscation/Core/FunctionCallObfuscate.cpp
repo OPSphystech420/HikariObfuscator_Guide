@@ -1,7 +1,7 @@
 // For open-source license, please refer to
 // [License](https://github.com/HikariObfuscator/Hikari/wiki/License).
 //===----------------------------------------------------------------------===//
-#include "llvm/Transforms/Obfuscation/FunctionCallObfuscate.h"
+#include "FunctionCallObfuscate.h"
 #include "json.hpp"
 #if LLVM_VERSION_MAJOR >= 17
 #include "llvm/ADT/SmallString.h"
@@ -18,8 +18,8 @@
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/Path.h"
 #include "llvm/Support/raw_ostream.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
-#include "llvm/Transforms/Obfuscation/compat/CallSite.h"
+#include "Utils.h"
+#include "compat/CallSite.h"
 #include <fstream>
 #include <set>
 

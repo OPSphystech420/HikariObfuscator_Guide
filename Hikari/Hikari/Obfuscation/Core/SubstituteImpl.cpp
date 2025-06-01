@@ -1,9 +1,9 @@
 //===----------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Obfuscation/SubstituteImpl.h"
+#include "SubstituteImpl.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/NoFolder.h"
-#include "llvm/Transforms/Obfuscation/CryptoUtils.h"
+#include "CryptoUtils.h"
 
 using namespace llvm;
 

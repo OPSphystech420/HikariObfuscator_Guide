@@ -91,12 +91,12 @@
 //
 //===----------------------------------------------------------------------------------===//
 
-#include "llvm/Transforms/Obfuscation/BogusControlFlow.h"
+#include "BogusControlFlow.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/InlineAsm.h"
 #include "llvm/IR/IntrinsicInst.h"
-#include "llvm/Transforms/Obfuscation/CryptoUtils.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
+#include "CryptoUtils.h"
+#include "Utils.h"
 #include "llvm/Transforms/Utils/Cloning.h"
 #include "llvm/Transforms/Utils/Local.h"
 #include "llvm/Transforms/Utils/ValueMapper.h"

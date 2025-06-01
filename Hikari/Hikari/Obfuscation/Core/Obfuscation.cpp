@@ -6,9 +6,9 @@
   Because currently there is no way to add dependency to transform passes
   Ref : http://lists.llvm.org/pipermail/llvm-dev/2011-February/038109.html
 */
-#include "llvm/Transforms/Obfuscation/Obfuscation.h"
+#include "Obfuscation.h"
 #include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
+#include "Utils.h"
 
 using namespace llvm;
 

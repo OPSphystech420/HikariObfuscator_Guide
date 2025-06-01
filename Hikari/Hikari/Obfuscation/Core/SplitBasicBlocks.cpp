@@ -3,9 +3,9 @@
 //===----------------------------------------------------------------------===//
 #include "llvm/IR/Instructions.h"
 #include "llvm/Support/CommandLine.h"
-#include "llvm/Transforms/Obfuscation/CryptoUtils.h"
-#include "llvm/Transforms/Obfuscation/Split.h"
-#include "llvm/Transforms/Obfuscation/Utils.h"
+#include "CryptoUtils.h"
+#include "Split.h"
+#include "Utils.h"
 
 using namespace llvm;
 

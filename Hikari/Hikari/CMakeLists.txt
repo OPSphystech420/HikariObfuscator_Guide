@@ -1,44 +1,34 @@
-# ./Hikari/CMakeLists.txt
-add_library(Hikari MODULE
-        FunctionCallObfuscate.cpp
-        CryptoUtils.cpp
-        BogusControlFlow.cpp
-        SubstituteImpl.cpp
-        Substitution.cpp
-        Flattening.cpp
-        Utils.cpp
-        SplitBasicBlocks.cpp
-        AntiClassDump.cpp
-        AntiDebugging.cpp
-        AntiHooking.cpp
-        StringEncryption.cpp
-        IndirectBranch.cpp
-        FunctionWrapper.cpp
-        ConstantEncryption.cpp
-        Obfuscation.cpp
-        PluginEntry.cpp
-)
+# ./CMakeLists.txt
+cmake_minimum_required(VERSION 3.22)
+project(Hikari-Obf-LLVM18-NDK27)
 
-target_include_directories(Hikari PUBLIC include)
+# Uncomment the appropriate architecture for your builds
+set(CMAKE_OSX_ARCHITECTURES x86_64)
+# set(CMAKE_OSX_ARCHITECTURES arm64)
 
-# LLVM is (typically) built with no C++ RTTI. We need to match that;
-# otherwise, we'll get linker errors about missing RTTI data.
-set_target_properties(Hikari PROPERTIES
-        COMPILE_FLAGS "-fno-rtti"
-)
+set(CMAKE_C_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r522817/bin/clang)
+set(CMAKE_CXX_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r522817/bin/clang++)
 
-# Get proper shared-library behavior (where symbols are not necessarily
-# resolved when the shared library is linked) on OS X.
-if (APPLE)
-    set_target_properties(Hikari PROPERTIES
-            LINK_FLAGS "-undefined dynamic_lookup"
-    )
-endif (APPLE)
+# Set LLVM_HOME so that find_package(LLVM) can locate LLVMConfig.cmake.
+set(ENV{LLVM_HOME} ${CMAKE_CURRENT_LIST_DIR}/clang-r522817)
 
-execute_process(
-        COMMAND git log -1 --format=%H
-        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-        OUTPUT_VARIABLE HIKARI_GIT_COMMIT_HASH
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-target_compile_definitions(Hikari PRIVATE "-DGIT_COMMIT_HASH=\"${HIKARI_GIT_COMMIT_HASH}\"")
+if (NOT DEFINED ENV{LLVM_HOME})
+    message(FATAL_ERROR "$LLVM_HOME is not defined")
+else ()
+    set(ENV{LLVM_DIR} $ENV{LLVM_HOME}/lib/cmake/llvm)
+endif ()
+
+find_package(LLVM REQUIRED CONFIG)
+add_definitions(${LLVM_DEFINITIONS})
+include_directories(${LLVM_INCLUDE_DIRS})
+link_directories(${LLVM_LIBRARY_DIRS})
+
+set(CMAKE_CXX_STANDARD 17)
+
+# Uncomment this for macOS arm64
+add_compile_definitions(ENDIAN_LITTLE)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+set(CMAKE_SKIP_RPATH ON)
+
+add_subdirectory(Obfuscation)
