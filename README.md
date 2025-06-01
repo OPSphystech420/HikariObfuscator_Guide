@@ -1,7 +1,6 @@
 Not Complete...
 
 ---
-MacOS ARM64
 
 ```bash
 git clone --recursive -b build/ios-xcode-llvm16 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
