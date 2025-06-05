@@ -1,7 +1,7 @@
 Not Complete...
 
 ---
-MacOS ARM64
+### MacOS ARM64
 
 ```bash
 git clone --recursive -b build/android-ndk-llvm18 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
@@ -19,7 +19,7 @@ If during `cmake -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel ../` you get
 CMake Error at clang-r522817/lib/cmake/llvm/LLVMExports.cmake:1238 (message):
   The imported target "LLVMDemangle" references the file
 
-     "/Users/grimreaper31/Desktop/HikariObfuscator_Guide/Hikari/clang-r522817/lib/libLLVMDemangle.a"
+     "../HikariObfuscator_Guide/Hikari/clang-r522817/lib/libLLVMDemangle.a"
 
   but this file does not exist.  Possible reasons include:
 
@@ -29,7 +29,7 @@ CMake Error at clang-r522817/lib/cmake/llvm/LLVMExports.cmake:1238 (message):
 
   * The installation package was faulty and contained
 
-     "/Users/grimreaper31/Desktop/HikariObfuscator_Guide/Hikari/clang-r522817/lib/cmake/llvm/LLVMExports.cmake"
+     "../HikariObfuscator_Guide/Hikari/clang-r522817/lib/cmake/llvm/LLVMExports.cmake"
 
   but not all the files it references.
 
@@ -48,3 +48,17 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel ../
 cmake --build .
 popd
 ```
+---
+If you load libHikari directly to the original NDK, you will encounter a number of errors and problems, for example `error: unable to load plugin 'libHikari.so': 'dlopen(libHikari.so, 0x0009): symbol not found in flat namespace '__ZTVN4llvm2cl6OptionE''`
+
+This is because the clang binary symbols included in the official NDK are incomplete. You need to build Android LLVM yourself to get the complete clang-18, clang and clang++ symbols to replace the corresponding three files included in the NDK. More info can be found [here](https://leadroyal.cn/p/1008/)
+
+---
+
+### Porting to NDK 
+
+NDK r27 (`27.0.12077973`) uses clang version r522817, as if you followed previous steps, we have configured our Hikari lib to use this version. 
+
+
+
+
