@@ -15,28 +15,31 @@ popd
 ```
 
 If during `cmake -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel ../` you get
-```error
-CMake Error at clang-r522817/lib/cmake/llvm/LLVMExports.cmake:1238 (message):
-  The imported target "LLVMDemangle" references the file
+> [!CAUTION]
+>```error
+>  CMake Error at clang-r522817/lib/cmake/llvm/LLVMExports.cmake:1238 (message):
+>  The imported target "LLVMDemangle" references the file
+>
+>      "../HikariObfuscator_Guide/Hikari/clang-r522817/lib/libLLVMDemangle.a"
+>
+>  but this file does not exist.  Possible reasons include:
+>
+>  * The file was deleted, renamed, or moved to another location.
+>
+>  * An install or uninstall procedure did not complete successfully.
+>
+>  * The installation package was faulty and contained
+>
+>      "../HikariObfuscator_Guide/Hikari/clang-r522817/lib/cmake/llvm/LLVMExports.cmake"
+>
+>  but not all the files it references.
+>
+>  Call Stack (most recent call first):
+>    clang-r522817/lib/cmake/llvm/LLVMConfig.cmake:287 (include)
+>    CMakeLists.txt:21 (find_package)
+>```
 
-     "../HikariObfuscator_Guide/Hikari/clang-r522817/lib/libLLVMDemangle.a"
 
-  but this file does not exist.  Possible reasons include:
-
-  * The file was deleted, renamed, or moved to another location.
-
-  * An install or uninstall procedure did not complete successfully.
-
-  * The installation package was faulty and contained
-
-     "../HikariObfuscator_Guide/Hikari/clang-r522817/lib/cmake/llvm/LLVMExports.cmake"
-
-  but not all the files it references.
-
-Call Stack (most recent call first):
-  clang-r522817/lib/cmake/llvm/LLVMConfig.cmake:287 (include)
-  CMakeLists.txt:21 (find_package)
-```
 Do the following:
 ```bash
 pushd ./clang-r522817/lib/cmake/llvm
@@ -49,9 +52,10 @@ cmake --build .
 popd
 ```
 ---
-If you load libHikari directly to the original NDK, you will encounter a number of errors and problems, including llvm not being able to recognize Hikari's obfuscation flags, for example `error: unable to load plugin 'libHikari.so': 'dlopen(libHikari.so, 0x0009): symbol not found in flat namespace '__ZTVN4llvm2cl6OptionE''`
-
-This is because the clang binary symbols included in the official NDK are incomplete. You need to build Android LLVM yourself to get the complete clang-18, clang and clang++ symbols to replace the corresponding three files included in the NDK. More info can be found [here](https://leadroyal.cn/p/1008/)
+> [!NOTE]
+> If you load libHikari directly to the original NDK, you will encounter a number of errors and problems, including llvm not being able to recognize Hikari's obfuscation flags, for example `error: unable to load plugin 'libHikari.so': 'dlopen(libHikari.so, 0x0009): symbol not found in flat namespace '__ZTVN4llvm2cl6OptionE''`
+>
+> This is because the clang binary symbols included in the official NDK are incomplete. You need to build Android LLVM yourself to get the complete clang-18, clang and clang++ symbols to replace the corresponding three files included in the NDK. More info can be found [here](https://leadroyal.cn/p/1008/)
 
 ---
 
