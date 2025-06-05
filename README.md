@@ -9,6 +9,20 @@ We will be using [**clang-r522817**](https://android.googlesource.com/platform/p
 ---
 ### MacOS ARM64 (should work universally on MacOS x86_64 and Linux)
 
+> [!WARNING]
+> If you don't have `CC` and `CXX` set in your [environment](#you-may-as-well-set-your-cc-and-cxx-for-future-uses), export default Xcode's clang or any other you wish
+> ```bash
+> export CC="$(xcrun --sdk macosx --find clang)"
+> export CXX="$(xcrun --sdk macosx --find clang++)"
+> ```
+> So you don't get error, during cmake configuration
+> ```error
+> CMake Error (message):
+>     Could not find compiler set in environment variable CC:
+> ```
+> ❗ Do not use our `clang-r522817` for that, otherwise during llvm-project build you will get errors
+> (You must use the same clang for Hikari plugin and llvm-project builds)
+
 ```bash
 git clone --recursive -b build/android-ndk-llvm18 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
 cd HikariObfuscator_Guide/Hikari
@@ -146,6 +160,11 @@ Open `SDK Tools` tab, enable `Show Package Details`, find `NDK (Side by side)`/`
 > echo $ANDROID_SDK_ROOT
 > ```
 > `/Users/user/Library/Android/sdk`
+> 
+> ##### You may as well set your `CC` and `CXX` for future uses
+> ```bash
+> $CC --version
+> ```
 
 ---
 
