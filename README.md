@@ -20,8 +20,10 @@ We will be using [**clang-r522817**](https://android.googlesource.com/platform/p
 > CMake Error (message):
 >     Could not find compiler set in environment variable CC:
 > ```
-> ❗ Do not use our `clang-r522817` for that, otherwise during llvm-project build you will get errors
+> ❗ Do not use our `clang-r522817` for that, as it is already included into our `CMakeLists.txt` and during llvm-project build you will get errors
 > (You must use the same clang for Hikari plugin and llvm-project builds)
+
+In our [`CMakeLists.txt`](https://github.com/OPSphystech420/HikariObfuscator_Guide/blob/build/android-ndk-llvm18/Hikari/CMakeLists.txt) you may change `CMAKE_OSX_ARCHITECTURES` to match your needs
 
 ```bash
 git clone --recursive -b build/android-ndk-llvm18 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
@@ -122,6 +124,14 @@ NDK r27 (`27.0.12077973`) uses Clang version r522817, as if you followed previou
    ninja install
    ```
 
+Now in your `./android-llvm/build/bin/` you may find `clang`, `clang++`, `clang-18`
+```
+clang --version
+clang version 18.0.0git (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)
+Target: x86_64-apple-darwin24.3.0
+Thread model: posix
+```
+
 ---
 
 If you haven't installed NDK r27 yet, follow this steps
@@ -169,4 +179,131 @@ Open `SDK Tools` tab, enable `Show Package Details`, find `NDK (Side by side)`/`
 ---
 
 Now we will replace `clang`, `clang++` and `clang++` in `$ANDROID_SDK_ROOT/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin` with those, which we've got from llvm-project
+
+We will copy our NDK `27.0.12077973` into `27.0.12077973-obf` and apply changes to it
+```bash
+cd $ANDROID_SDK_ROOT/ndk
+cp -r 27.0.12077973 27.0.12077973-obf
+cd 27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/bin
+mv clang clang.bak
+mv clang++ clang++.bak
+mv clang-18 clang-18.bak
+```
+Now copy `clang`, `clang++` and `clang-18` into this `bin` direcotry of `27.0.12077973-obf`
+```bash
+cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang        .
+cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang++      .
+cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang-18     .
+```
+
+---
+
+### Including Hikari obfuscation into your Android project
+
+You may move `libHikari.so` to your project directory or keep it at `/HikariObfuscator_Guide/Hikari/build/Obfuscation`
+
+Example porting with `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project
+```gradle
+android {
+    ..
+    ndkVersion = "27.0.12077973"
+    ndkPath = "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf" // you must use our modified NDK here
+    ..
+    defaultConfig {
+        externalNativeBuild {
+            cmake {
+                val obfLibDir =
+                    "/your_path_to/libHikari.so"
+                val obfArgs = listOf(
+                    "-fvisibility=hidden",
+                    "-fpass-plugin=$obfLibDir",
+                    "-Xclang",
+                    "-load",
+                    "-Xclang",
+                    obfLibDir,
+                    "-mllvm",
+                    "-enable-strcry" // string encryption flag
+                )
+                cppFlags += obfArgs
+                cFlags += obfArgs
+            }
+        }
+    }
+    ..
+}
+```
+
+Example porting with `app/src/main/cpp/CMakeLists.txt`, Android Java Native C++ project
+
+in `app/build.gradle` specify
+```gradle
+android {
+    ..
+    ndkVersion = "27.0.12077973"
+    ndkPath = "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf"
+    ..
+```
+
+```cmake
+# -------------------------------
+#  CMakeLists.txt for ProjectNative
+# -------------------------------
+
+cmake_minimum_required(VERSION 3.4.1)
+
+project(ProjectNative LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
+)
+
+add_library( Project SHARED
+        setup.cpp
+        src/main.cpp
+        ...
+)
+
+target_compile_options(Project PRIVATE
+        # C & C++
+        -w
+        -s
+        ...
+
+        # C++
+        $<$<COMPILE_LANGUAGE:CXX>:
+        -Werror
+        -std=c++20
+        ...
+        >
+
+        # Obfuscation flags
+        -fvisibility=hidden
+        -fpass-plugin=/your_path_to/libHikari.so
+        -Xclang
+        -load
+        -Xclang=/your_path_to/libHikari.so
+        -mllvm
+        -enable-strcry // string encryption flag
+)
+
+find_library( ...-lib     ... )
+
+target_link_libraries( Project PRIVATE
+        ${...-lib}
+)
+```
+
+**No examples porting to `Android.mk` and `Application.mk`**
+
+`ndkBuild` will cause
+> [!CAUTION]
+>```error
+> GNUMAKE: Expected exactly one source file in compile step
+>```
+Not resolved
 
