@@ -9,6 +9,8 @@
 #else
 #include "llvm/ADT/Triple.h"
 #endif
+#include "Utils.h"
+#include "compat/CallSite.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/InstIterator.h"
@@ -18,10 +20,7 @@
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/Path.h"
 #include "llvm/Support/raw_ostream.h"
-#include "Utils.h"
-#include "compat/CallSite.h"
 #include <fstream>
-#include <set>
 
 using namespace llvm;
 
@@ -74,7 +73,7 @@ struct FunctionCallObfuscate : public FunctionPass {
     }
     this->triple = Triple(M.getTargetTriple());
     if (triple.getVendor() == Triple::VendorType::Apple) {
-      Type *Int8PtrTy = Type::getInt8Ty(M.getContext())->getPointerTo();
+        Type *Int8PtrTy = PointerType::get(Type::getInt8Ty(M.getContext()),0);
       // Generic ObjC Runtime Declarations
       FunctionType *IMPType =
           FunctionType::get(Int8PtrTy, {Int8PtrTy, Int8PtrTy}, true);
@@ -154,7 +153,7 @@ struct FunctionCallObfuscate : public FunctionPass {
           Function *objc_getClass_Func =
               cast<Function>(M->getFunction("objc_getClass"));
           Value *newClassName =
-              builder.CreateGlobalStringPtr(StringRef(className));
+              builder.CreateGlobalString(StringRef(className));
           CallInst *CI = builder.CreateCall(objc_getClass_Func, {newClassName});
           // We need to bitcast it back to avoid IRVerifier
           Value *BCI = builder.CreateBitCast(CI, I->getType());
@@ -178,7 +177,7 @@ struct FunctionCallObfuscate : public FunctionPass {
           IRBuilder<> builder(I);
           Function *sel_registerName_Func =
               cast<Function>(M->getFunction("sel_registerName"));
-          Value *newGlobalSELName = builder.CreateGlobalStringPtr(SELName);
+          Value *newGlobalSELName = builder.CreateGlobalString(SELName);
           CallInst *CI =
               builder.CreateCall(sel_registerName_Func, {newGlobalSELName});
           // We need to bitcast it back to avoid IRVerifier
@@ -239,8 +238,7 @@ struct FunctionCallObfuscate : public FunctionPass {
       }
       std::vector<Constant *> elements = {};
       for (unsigned int i = 0; i < CompilerUsed->getNumOperands(); i++) {
-        Constant *Op =
-            CompilerUsed->getAggregateElement(i);
+        Constant *Op = CompilerUsed->getAggregateElement(i);
         if (!Op->isNullValue())
           elements.emplace_back(Op);
       }
@@ -248,8 +246,7 @@ struct FunctionCallObfuscate : public FunctionPass {
         ConstantArray *NewCA = cast<ConstantArray>(
             ConstantArray::get(CompilerUsed->getType(), elements));
         CompilerUsedGV->setInitializer(NewCA);
-      }
-      else {
+      } else {
         CompilerUsedGV->dropAllReferences();
         CompilerUsedGV->eraseFromParent();
       }
@@ -270,7 +267,7 @@ struct FunctionCallObfuscate : public FunctionPass {
     FixFunctionConstantExpr(&F);
     HandleObjC(&F);
     Type *Int32Ty = Type::getInt32Ty(M->getContext());
-    Type *Int8PtrTy = Type::getInt8Ty(M->getContext())->getPointerTo();
+      Type *Int8PtrTy = PointerType::get(Type::getInt8Ty(M->getContext()), 0);
     // ObjC Runtime Declarations
     FunctionType *dlopen_type = FunctionType::get(
         Int8PtrTy, {Int8PtrTy, Int32Ty},
@@ -312,8 +309,8 @@ struct FunctionCallObfuscate : public FunctionPass {
           // It's only safe to restrict our modification to external symbols
           // Otherwise stripped binary will crash
           if (!calledFunction->empty() ||
-              calledFunction->getName().equals("dlsym") ||
-              calledFunction->getName().equals("dlopen") ||
+              calledFunction->getName().equals_insensitive("dlsym") ||
+              calledFunction->getName().equals_insensitive("dlopen") ||
               calledFunction->isIntrinsic())
             continue;
 
@@ -344,7 +341,7 @@ struct FunctionCallObfuscate : public FunctionPass {
             // Create dlsym call
             Value *fp = IRB.CreateCall(
                 dlsym_decl,
-                {Handle, IRB.CreateGlobalStringPtr(calledFunctionName)});
+                {Handle, IRB.CreateGlobalString(calledFunctionName)});
             Value *bitCastedFunction =
                 IRB.CreateBitCast(fp, CS.getCalledValue()->getType());
             CS.setCalledFunction(bitCastedFunction);
