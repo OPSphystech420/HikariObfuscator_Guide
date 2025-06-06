@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.22)
 project(Hikari-Obf-LLVM20-NDK29)
 
 # Uncomment the appropriate architecture for your builds
-set(CMAKE_OSX_ARCHITECTURES x86_64)
-# set(CMAKE_OSX_ARCHITECTURES arm64)
+# set(CMAKE_OSX_ARCHITECTURES x86_64)
+set(CMAKE_OSX_ARCHITECTURES arm64)
 
 set(CMAKE_C_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r547379/bin/clang)
 set(CMAKE_CXX_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r547379/bin/clang++)
