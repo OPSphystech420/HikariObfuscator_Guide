@@ -25,7 +25,7 @@
 > ❗ Do not use our `clang-r522817` for that, as it is already included into our `CMakeLists.txt` and during llvm-project build you will get errors
 > (You must use the same clang for Hikari plugin and llvm-project builds)
 
-In our [`CMakeLists.txt`](https://github.com/OPSphystech420/HikariObfuscator_Guide/blob/build/android-ndk-llvm18/Hikari/CMakeLists.txt) you may change `CMAKE_OSX_ARCHITECTURES` to match your needs (set to ARM64 as default)
+In our [`CMakeLists.txt`](https://github.com/OPSphystech420/HikariObfuscator_Guide/blob/build/android-ndk-llvm18/Hikari/CMakeLists.txt) you may change `CMAKE_OSX_ARCHITECTURES` to match your needs (set to arm64 as default)
 
 ```bash
 git clone --recursive -b build/android-ndk-llvm20 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
@@ -108,14 +108,14 @@ NDK r29.0.13113456 uses Clang version r547379, as if you followed previous steps
    As default оn Apple platforms, CMake inspects the host compiler and the CMake binary’s own architecture to determine target slices. If you don’t set 
    `CMAKE_OSX_ARCHITECTURES`, it simply builds for the host’s architecture (the architecture of the clang/CMake used to configure).
    
-   We will set `-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"` as universal, you may change it
+   We will set `-DCMAKE_OSX_ARCHITECTURES=arm64`, you may change it to `x86_64` or `"arm64;x86_64"` aka universal
    ```bash
    mkdir -p build && cd build
    cmake -G "Ninja" ../llvm-project/llvm \
       -DCMAKE_INSTALL_PREFIX="./llvm_x64" \
       -DCMAKE_CXX_STANDARD=17 \
       -DCMAKE_BUILD_TYPE=MinSizeRel \
-      -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+      -DCMAKE_OSX_ARCHITECTURES=arm64 \
       -DLLVM_APPEND_VC_REV=ON \
       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;lld;mlir;openmp;polly;" \
       -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind" \
@@ -130,7 +130,7 @@ NDK r29.0.13113456 uses Clang version r547379, as if you followed previous steps
       -DLLVM_BUILD_DOCS=OFF
    cmake --build .
    ```
-3. Install LLVM using Ninja
+4. Install LLVM using Ninja
    ```bash
    ninja install
    ```
