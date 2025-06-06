@@ -86,7 +86,7 @@ Now you may find our plugin `libHikari.so` at `/HikariObfuscator_Guide/Hikari/bu
 
 ### Porting with Android Studio 2024.3.2.15 NDK r27
 
-NDK r27 (`27.0.12077973`) uses Clang version r522817, as if you followed previous steps, we have configured our Hikari lib to use this version of Clang prebuilt by Google for Android platform use (AOSP).
+NDK r27 (`27.0.12077973`) uses Clang version r522817, as if you followed previous steps, we have configured our libHikari.so to use this version prebuilt by Google for Android platform (AOSP).
 
 (You may see `$ANDROID_SDK_ROOT/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang --version`)
 
