@@ -130,7 +130,7 @@ NDK r29.0.13113456 uses Clang version r547379, as if you followed previous steps
 Now in your `./android-llvm/build/bin/` you may find `clang`, `clang++`, `clang-20`
 ```
 clang --version
-clang version 18.0.0git (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)
+clang version 20.0.0git (https://android.googlesource.com/toolchain/llvm-project b718bcaf8c198c82f3021447d943401e3ab5bd54)
 Target: x86_64-apple-darwin24.3.0
 Thread model: posix
 ```
