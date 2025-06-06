@@ -1,4 +1,4 @@
-# Hikari Plugin Android Studio 2024.3.2.15 NDK r29 (LLVM-18)
+# Hikari Plugin Android Studio 2024.3.2.15 NDK r27 (LLVM-18)
 
 [Android Studio](https://developer.android.com/studio?hl=en)
 
