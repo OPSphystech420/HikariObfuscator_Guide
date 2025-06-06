@@ -1,10 +1,10 @@
-# Hikari Plugin Android Studio 2024.3.2.15 NDK r27 (LLVM-18)
+# Hikari Plugin Android Studio 2024.3.2.15 NDK r29 (LLVM-18)
 
 [Android Studio](https://developer.android.com/studio?hl=en)
 
 [Android llvm-project](https://android.googlesource.com/toolchain/llvm-project)
 
-We will be using [**clang-r547379**](https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/refs/heads/main/clang-r547379) – essentially LLVM/Clang 20.0.0 as packaged by AOSP/NDK, meaning it supports all LLVM 20–era front-end capabilities (including C++2a/C++2b features as of early 2025) and targets a broad range of backends for x86, ARM, AArch64, RISC-V, WebAssembly, etc. It also incorporates Android-specific toolchain adaptations such as updated libc++, sanitizers, LTO support, and BOLT optimizations, alongside numerous platform-specific patches (e.g., `BOLT-Increase-max-allocation-size-to-allow-BOLTing-clang-and-rustc.patch`) that ensure compatibility on Android devices. This Clang revision aligns with **NDK r29 (r29.0.13113456)**, and the upstream source commit for clang-r547379 is **f142f8afe21bceb00fb495468aa0b5043e98c419** in the `llvm-project` repository.
+We will be using [**clang-r522817**](https://android.googlesource.com/platform/prebuilts/clang/host/darwin-x86/+/1c8f09d76cb556336e677ef21111c1d7b20775e4/clang-r522817/) – essentially LLVM/Clang 18.0.1 as packaged by AOSP/NDK, meaning it supports all LLVM 18–era front-end capabilities (C 1x/C++2a/C++2b features as of early 2024), backends for x86, ARM, AArch64, RISC-V, WebAssembly, etc., and the Android-specific toolchain adaptations (libc++, sanitizers, LTO, BOLT, etc.)    (**NDK revision r27 - d8003a456d14a3deb8054cdaa529ffbf02d9b262**)
 
 ---
 ### MacOS ARM64 (should work universally on MacOS x86_64 and Linux)
