@@ -4,9 +4,11 @@
 
 [Android llvm-project](https://android.googlesource.com/toolchain/llvm-project)
 
-We will be using [**clang-r547379**](https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/refs/heads/main/clang-r547379) – essentially LLVM/Clang 20.0.0 as packaged by AOSP/NDK, meaning it supports all LLVM 20–era front-end capabilities (including C++2a/C++2b features as of early 2025) and targets a broad range of backends for x86, ARM, AArch64, RISC-V, WebAssembly, etc. It also incorporates Android-specific toolchain adaptations such as updated libc++, sanitizers, LTO support, and BOLT optimizations, alongside numerous platform-specific patches (e.g., `BOLT-Increase-max-allocation-size-to-allow-BOLTing-clang-and-rustc.patch`) that ensure compatibility on Android devices. This Clang revision aligns with **NDK r29 (r29.0.13113456)**, and the upstream source commit for clang-r547379 is **b718bcaf8c198c82f3021447d943401e3ab5bd54** in the `llvm-project` repository.
+> [!NOTE]
+> We will be using [**clang-r547379**](https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/refs/heads/main/clang-r547379) – essentially LLVM/Clang 20.0.0 as packaged by AOSP/NDK, meaning it supports all LLVM 20–era front-end capabilities (including C++2a/C++2b features as of early 2025) and targets a broad range of backends for x86, ARM, AArch64, RISC-V, WebAssembly, etc. It also incorporates Android-specific toolchain adaptations such as updated libc++, sanitizers, LTO support, and BOLT optimizations, alongside numerous platform-specific patches (e.g., `BOLT-Increase-max-allocation-size-to-allow-BOLTing-clang-and-rustc.patch`) that ensure compatibility on Android devices. This Clang revision aligns with **NDK r29 (r29.0.13113456)**, and the upstream source commit for clang-r547379 is **b718bcaf8c198c82f3021447d943401e3ab5bd54** in the `llvm-project` repository.
 
----
+# Guide
+
 ### MacOS ARM64 (should work universally on MacOS x86_64 and Linux)
 
 > [!WARNING]
