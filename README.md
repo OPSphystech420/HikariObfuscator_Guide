@@ -27,6 +27,9 @@ In our [`CMakeLists.txt`](https://github.com/OPSphystech420/HikariObfuscator_Gui
 
 ```bash
 git clone --recursive -b build/android-ndk-llvm20 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
+```
+
+```bash
 cd HikariObfuscator_Guide/Hikari
 mkdir -p clang-r547379 && pushd clang-r547379
 curl -L https://android.googlesource.com/platform/prebuilts/clang/host/darwin-x86/+archive/aff5a55a47b1a512815f21aae43475681a8bf238/clang-r547379.tar.gz | tar xz && popd
