@@ -1,16 +1,16 @@
 # ./CMakeLists.txt
 cmake_minimum_required(VERSION 3.22)
-project(Hikari-Obf-LLVM18-NDK27)
+project(Hikari-Obf-LLVM20-NDK29)
 
 # Uncomment the appropriate architecture for your builds
 set(CMAKE_OSX_ARCHITECTURES x86_64)
 # set(CMAKE_OSX_ARCHITECTURES arm64)
 
-set(CMAKE_C_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r522817/bin/clang)
-set(CMAKE_CXX_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r522817/bin/clang++)
+set(CMAKE_C_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r547379/bin/clang)
+set(CMAKE_CXX_COMPILER ${CMAKE_CURRENT_LIST_DIR}/clang-r547379/bin/clang++)
 
 # Set LLVM_HOME so that find_package(LLVM) can locate LLVMConfig.cmake.
-set(ENV{LLVM_HOME} ${CMAKE_CURRENT_LIST_DIR}/clang-r522817)
+set(ENV{LLVM_HOME} ${CMAKE_CURRENT_LIST_DIR}/clang-r547379)
 
 if (NOT DEFINED ENV{LLVM_HOME})
     message(FATAL_ERROR "$LLVM_HOME is not defined")
