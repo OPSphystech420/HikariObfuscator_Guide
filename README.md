@@ -203,7 +203,10 @@ cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang-20  
 
 ### Including Hikari obfuscation into your Android project
 
-You may move `libHikari.so` to your project directory or keep it at `/HikariObfuscator_Guide/Hikari/build/Obfuscation`
+You may move `libHikari.so` to your project directory or store within `29.0.13113456-obf` libs, for example
+```
+cp    /your_path_to/HikariObfuscator_Guide/Hikari/build/Obfuscation/libHikari.so    $ANDROID_SDK_ROOT/ndk/29.0.13113456-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/
+```
 
 Example porting with `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project
 ```gradle
@@ -216,7 +219,7 @@ android {
         externalNativeBuild {
             cmake {
                 val obfLibDir =
-                    "/your_path_to/libHikari.so"
+                    "$ANDROID_SDK_ROOT/ndk/29.0.13113456-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"
                 val obfArgs = listOf(
                     "-fvisibility=hidden",
                     "-fpass-plugin=$obfLibDir",
@@ -286,10 +289,10 @@ target_compile_options(Project PRIVATE
 
         # Obfuscation flags
         -fvisibility=hidden
-        -fpass-plugin=/your_path_to/libHikari.so
+        -fpass-plugin=$ANDROID_SDK_ROOT/ndk/29.0.13113456-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so
         -Xclang
         -load
-        -Xclang=/your_path_to/libHikari.so
+        -Xclang=$ANDROID_SDK_ROOT/ndk/29.0.13113456-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so
         -mllvm
         -enable-strcry # string encryption flag
 )
