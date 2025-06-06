@@ -4,7 +4,7 @@
 
 [Android llvm-project](https://android.googlesource.com/toolchain/llvm-project)
 
-We will be using [**clang-r547379**](https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/refs/heads/main/clang-r547379) – essentially LLVM/Clang 20.0.0 as packaged by AOSP/NDK, meaning it supports all LLVM 20–era front-end capabilities (including C++2a/C++2b features as of early 2025) and targets a broad range of backends for x86, ARM, AArch64, RISC-V, WebAssembly, etc. It also incorporates Android-specific toolchain adaptations such as updated libc++, sanitizers, LTO support, and BOLT optimizations, alongside numerous platform-specific patches (e.g., `BOLT-Increase-max-allocation-size-to-allow-BOLTing-clang-and-rustc.patch`) that ensure compatibility on Android devices. This Clang revision aligns with **NDK r29 (r29.0.13113456)**, and the upstream source commit for clang-r547379 is **f142f8afe21bceb00fb495468aa0b5043e98c419** in the `llvm-project` repository.
+We will be using [**clang-r547379**](https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/refs/heads/main/clang-r547379) – essentially LLVM/Clang 20.0.0 as packaged by AOSP/NDK, meaning it supports all LLVM 20–era front-end capabilities (including C++2a/C++2b features as of early 2025) and targets a broad range of backends for x86, ARM, AArch64, RISC-V, WebAssembly, etc. It also incorporates Android-specific toolchain adaptations such as updated libc++, sanitizers, LTO support, and BOLT optimizations, alongside numerous platform-specific patches (e.g., `BOLT-Increase-max-allocation-size-to-allow-BOLTing-clang-and-rustc.patch`) that ensure compatibility on Android devices. This Clang revision aligns with **NDK r29 (r29.0.13113456)**, and the upstream source commit for clang-r547379 is **b718bcaf8c198c82f3021447d943401e3ab5bd54** in the `llvm-project` repository.
 
 ---
 ### MacOS ARM64 (should work universally on MacOS x86_64 and Linux)
@@ -26,10 +26,10 @@ We will be using [**clang-r547379**](https://android.googlesource.com/platform/p
 In our [`CMakeLists.txt`](https://github.com/OPSphystech420/HikariObfuscator_Guide/blob/build/android-ndk-llvm18/Hikari/CMakeLists.txt) you may change `CMAKE_OSX_ARCHITECTURES` to match your needs (set to x86_64 as default)
 
 ```bash
-git clone --recursive -b build/android-ndk-llvm18 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
+git clone --recursive -b build/android-ndk-llvm20 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
 cd HikariObfuscator_Guide/Hikari
-mkdir -p clang-r522817 && pushd clang-r522817
-curl -L https://android.googlesource.com/platform/prebuilts/clang/host/darwin-x86/+archive/1c8f09d76cb556336e677ef21111c1d7b20775e4/clang-r522817.tar.gz | tar xz && popd
+mkdir -p clang-r547379 && pushd clang-r547379
+curl -L https://android.googlesource.com/platform/prebuilts/clang/host/darwin-x86/+archive/aff5a55a47b1a512815f21aae43475681a8bf238/clang-r547379.tar.gz | tar xz && popd
 mkdir -p build && pushd build
 cmake -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel ../
 cmake --build .
@@ -39,10 +39,10 @@ popd
 If during `cmake -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel ../` you get
 > [!CAUTION]
 >```error
->  CMake Error at clang-r522817/lib/cmake/llvm/LLVMExports.cmake:1238 (message):
+>  CMake Error at clang-r547379/lib/cmake/llvm/LLVMExports.cmake:1238 (message):
 >  The imported target "LLVMDemangle" references the file
 >
->      "../HikariObfuscator_Guide/Hikari/clang-r522817/lib/libLLVMDemangle.a"
+>      "../HikariObfuscator_Guide/Hikari/clang-r547379/lib/libLLVMDemangle.a"
 >
 >  but this file does not exist.  Possible reasons include:
 >
@@ -52,19 +52,19 @@ If during `cmake -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel ../` you get
 >
 >  * The installation package was faulty and contained
 >
->      "../HikariObfuscator_Guide/Hikari/clang-r522817/lib/cmake/llvm/LLVMExports.cmake"
+>      "../HikariObfuscator_Guide/Hikari/clang-r547379/lib/cmake/llvm/LLVMExports.cmake"
 >
 >  but not all the files it references.
 >
 >  Call Stack (most recent call first):
->    clang-r522817/lib/cmake/llvm/LLVMConfig.cmake:287 (include)
+>    clang-r547379/lib/cmake/llvm/LLVMConfig.cmake:287 (include)
 >    CMakeLists.txt:21 (find_package)
 >```
 
 
 Do the following:
 ```bash
-pushd ./clang-r522817/lib/cmake/llvm
+pushd ./clang-r547379/lib/cmake/llvm
 cp LLVMExports.cmake LLVMExports.cmake.bak
 sed -i.bak '/foreach(target ${_IMPORT_CHECK_TARGETS}/,/unset(_IMPORT_CHECK_TARGETS)/ s/^/#/' LLVMExports.cmake
 popd
@@ -84,18 +84,18 @@ Now you may find our plugin `libHikari.so` at `/HikariObfuscator_Guide/Hikari/bu
 
 ---
 
-### Porting with Android Studio 2024.3.2.15 NDK r27
+### Porting with Android Studio 2024.3.2.15 NDK r29.0.13113456
 
-NDK r27 (`27.0.12077973`) uses Clang version r522817, as if you followed previous steps, we have configured our libHikari.so to use this version prebuilt by Google for Android platform (AOSP).
+NDK r29.0.13113456 uses Clang version r547379, as if you followed previous steps, we have configured our libHikari.so to use this version prebuilt by Google for Android platform (AOSP).
 
-(You may see `$ANDROID_SDK_ROOT/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang --version`)
+(You may see `$ANDROID_SDK_ROOT/ndk/29.0.13113456/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang --version`)
 
-1. We will clone llvm-project and set it to NDK version we need (d8003a456d14a3deb8054cdaa529ffbf02d9b262)
+1. We will clone llvm-project and set it to NDK version we need (b718bcaf8c198c82f3021447d943401e3ab5bd54)
     ```bash
     mkdir -p android-llvm && cd android-llvm
     git clone https://android.googlesource.com/toolchain/llvm-project
     pushd llvm-project
-    git checkout d8003a456d14a3deb8054cdaa529ffbf02d9b262
+    git checkout b718bcaf8c198c82f3021447d943401e3ab5bd54
     popd
     ```
 2. Configure and build LLVM with CMake
@@ -124,7 +124,7 @@ NDK r27 (`27.0.12077973`) uses Clang version r522817, as if you followed previou
    ninja install
    ```
 
-Now in your `./android-llvm/build/bin/` you may find `clang`, `clang++`, `clang-18`
+Now in your `./android-llvm/build/bin/` you may find `clang`, `clang++`, `clang-20`
 ```
 clang --version
 clang version 18.0.0git (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)
@@ -134,16 +134,16 @@ Thread model: posix
 
 ---
 
-If you haven't installed NDK r27 yet, follow this steps
+If you haven't installed NDK r29.0.13113456 yet, follow this steps
 
 Open your `Android Studio` and go to `Tools` -> `SDK Manager`
 
 ![](https://github.com/OPSphystech420/HikariObfuscator_Guide/blob/main/imgs/tools.png)
 
 
-Open `SDK Tools` tab, enable `Show Package Details`, find `NDK (Side by side)`/`27.0.12077973`, `Apply`, press `OK`
+Open `SDK Tools` tab, enable `Show Package Details`, find `NDK (Side by side)`/`29.0.13113456`, `Apply`, press `OK`
 
-![](https://github.com/OPSphystech420/HikariObfuscator_Guide/blob/main/imgs/SDKmanagerNDKr27.png)
+![](https://github.com/OPSphystech420/HikariObfuscator_Guide/blob/main/imgs/SDKmanagerNDKr29.png)
 
 
 ---
@@ -178,22 +178,22 @@ Open `SDK Tools` tab, enable `Show Package Details`, find `NDK (Side by side)`/`
 
 ---
 
-Now we will replace `clang`, `clang++` and `clang++` in `$ANDROID_SDK_ROOT/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin` with those, which we've got from llvm-project
+Now we will replace `clang`, `clang++` and `clang-20` in `$ANDROID_SDK_ROOT/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin` with those, which we've got from llvm-project
 
-We will copy our NDK `27.0.12077973` into `27.0.12077973-obf` and apply changes to it
+We will copy our NDK `29.0.13113456` into `29.0.13113456-obf` and apply changes to it
 ```bash
 cd $ANDROID_SDK_ROOT/ndk
-cp -r 27.0.12077973 27.0.12077973-obf
-cd 27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/bin
+cp -r 29.0.13113456 29.0.13113456-obf
+cd 29.0.13113456-obf/toolchains/llvm/prebuilt/darwin-x86_64/bin
 mv clang clang.bak
 mv clang++ clang++.bak
-mv clang-18 clang-18.bak
+mv clang-20 clang-20.bak
 ```
-Now copy `clang`, `clang++` and `clang-18` into this `bin` direcotry of `27.0.12077973-obf`
+Now copy `clang`, `clang++` and `clang-20` into this `bin` direcotry of `27.0.12077973-obf`
 ```bash
 cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang        .
 cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang++      .
-cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang-18     .
+cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang-20     .
 ```
 
 ---
@@ -206,8 +206,8 @@ Example porting with `build.gradle.kts (Module :app)`, Android Kotlin Native C++
 ```gradle
 android {
     ..
-    ndkVersion = "27.0.12077973"
-    ndkPath = "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf" // you must use our modified NDK here
+    ndkVersion = "29.0.13113456"
+    ndkPath = "$ANDROID_SDK_ROOT/ndk/29.0.13113456-obf" // you must use our modified NDK here
     ..
     defaultConfig {
         externalNativeBuild {
@@ -239,8 +239,8 @@ in `app/build.gradle` specify
 ```gradle
 android {
     ..
-    ndkVersion = "27.0.12077973"
-    ndkPath = "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf"
+    ndkVersion = "29.0.13113456"
+    ndkPath = "$ANDROID_SDK_ROOT/ndk/29.0.13113456-obf"
     ..
 ```
 
