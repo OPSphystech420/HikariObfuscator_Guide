@@ -178,7 +178,7 @@ Open `SDK Tools` tab, enable `Show Package Details`, find `NDK (Side by side)`/`
 
 ---
 
-Now we will replace `clang`, `clang++` and `clang++` in `$ANDROID_SDK_ROOT/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin` with those, which we've got from llvm-project
+Now we will replace `clang`, `clang++` and `clang-18` in `$ANDROID_SDK_ROOT/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin` with those, which we've got from llvm-project
 
 We will copy our NDK `27.0.12077973` into `27.0.12077973-obf` and apply changes to it
 ```bash
