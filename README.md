@@ -27,6 +27,9 @@ In our [`CMakeLists.txt`](https://github.com/OPSphystech420/HikariObfuscator_Gui
 
 ```bash
 git clone --recursive -b build/android-ndk-llvm18 https://github.com/OPSphystech420/HikariObfuscator_Guide.git
+```
+
+```bash
 cd HikariObfuscator_Guide/Hikari
 mkdir -p clang-r522817 && pushd clang-r522817
 curl -L https://android.googlesource.com/platform/prebuilts/clang/host/darwin-x86/+archive/1c8f09d76cb556336e677ef21111c1d7b20775e4/clang-r522817.tar.gz | tar xz && popd
@@ -200,7 +203,10 @@ cp /your_path_to/HikariObfuscator_Guide/Hikari/android-llvm/build/bin/clang-18  
 
 ### Including Hikari obfuscation into your Android project
 
-You may move `libHikari.so` to your project directory or keep it at `/HikariObfuscator_Guide/Hikari/build/Obfuscation`
+You may move `libHikari.so` to your project directory or store within `27.0.12077973-obf` libs, for example
+```
+cp    /your_path_to/HikariObfuscator_Guide/Hikari/build/Obfuscation/libHikari.so    $ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/
+```
 
 Example porting with `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project
 ```gradle
@@ -213,7 +219,7 @@ android {
         externalNativeBuild {
             cmake {
                 val obfLibDir =
-                    "/your_path_to/libHikari.so"
+                    "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"
                 val obfArgs = listOf(
                     "-fvisibility=hidden",
                     "-fpass-plugin=$obfLibDir",
@@ -283,10 +289,10 @@ target_compile_options(Project PRIVATE
 
         # Obfuscation flags
         -fvisibility=hidden
-        -fpass-plugin=/your_path_to/libHikari.so
+        -fpass-plugin=$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so
         -Xclang
         -load
-        -Xclang=/your_path_to/libHikari.so
+        -Xclang=$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so
         -mllvm
         -enable-strcry // string encryption flag
 )
