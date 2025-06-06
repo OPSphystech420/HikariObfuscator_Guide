@@ -288,7 +288,7 @@ target_compile_options(Project PRIVATE
         -load
         -Xclang=/your_path_to/libHikari.so
         -mllvm
-        -enable-strcry // string encryption flag
+        -enable-strcry # string encryption flag
 )
 
 find_library( ...-lib     ... )
