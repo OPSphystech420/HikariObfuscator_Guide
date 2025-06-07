@@ -216,22 +216,23 @@ You may move `libHikari.so` to your project directory or store within `27.0.1207
 cp    /your_path_to/HikariObfuscator_Guide/Hikari/build/Obfuscation/libHikari.so    $ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/
 ```
 
-Example porting with `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project
+Example porting with cmake `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project
 ```gradle
 android {
-    ..
+    // ...
     ndkVersion = "27.0.12077973"
     ndkPath = "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf" // you must use our modified NDK here
-    ..
+    // ...
     defaultConfig {
         externalNativeBuild {
             cmake {
+                val ndkDir = android.ndkDirectory
                 val obfLibDir =
-                    "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"
+                     "$ndkDir/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"
                 val obfArgs = listOf(
                     "-fvisibility=hidden",
                     "-fpass-plugin=$obfLibDir",
-                    "-Xclang",
+                    "-Xclang",                         // -Xclang <arg>, -Xclang=<arg> - Pass <arg> to clang -cc1
                     "-load",
                     "-Xclang",
                     obfLibDir,
@@ -243,21 +244,49 @@ android {
             }
         }
     }
-    ..
+    // ...
 }
 ```
 
-Example porting with `app/src/main/cpp/CMakeLists.txt`, Android Java Native C++ project
+Example porting with cmake `app/build.gradle` and `app/src/main/cpp/CMakeLists.txt`, Android Java Native C++ project
 
 in `app/build.gradle` specify
 ```gradle
 android {
-    ..
+    // ...
     ndkVersion = "27.0.12077973"
     ndkPath = "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf"
-    ..
+    // ...
+```
+You have two options, you may load the plugin and specify the flags with **gradle cmake** (1) or you may do it in CMakeLists.txt **target_compile_options** (2).
+
+(1)
+```gradle
+android {
+    // ...
+    defaultConfig {
+        // ...
+        externalNativeBuild {
+            cmake {
+                def ndkDir = android.ndkDirectory
+                def obfLib = "$ndkDir/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"
+
+                cFlags  "-fvisibility=hidden",
+                        "-fpass-plugin=${obfLib}",
+                        "-Xclang", "-load", "-Xclang", "${obfLib}"  // -Xclang <arg>, -Xclang=<arg> - Pass <arg> to clang -cc1
+                cppFlags "-fvisibility=hidden",
+                        "-fpass-plugin=${obfLib}",
+                        "-Xclang", "-load", "-Xclang", "${obfLib}"  // -Xclang <arg>, -Xclang=<arg> - Pass <arg> to clang -cc1
+
+                cppFlags "-mllvm", "-enable-strcry"  // string encryption flag
+            }
+        }
+    }
+    // ...
+}
 ```
 
+(2)
 ```cmake
 # -------------------------------
 #  CMakeLists.txt for ProjectNative
@@ -267,49 +296,33 @@ cmake_minimum_required(VERSION 3.4.1)
 
 project(ProjectNative LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+# your Project set
+# ...
 
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
+# your Project include_directories and add_library 
+# ...
 
-add_library( Project SHARED
-        setup.cpp
-        src/main.cpp
-        ...
+set(HIKARI_PLUGIN
+        "${ANDROID_NDK}/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"     # set path
 )
 
 target_compile_options(Project PRIVATE
-        # C & C++
-        -w
-        -s
-        ...
-
-        # C++
-        $<$<COMPILE_LANGUAGE:CXX>:
-        -Werror
-        -std=c++20
-        ...
-        >
+        # your C & C++ flags
+        # ...
 
         # Obfuscation flags
         -fvisibility=hidden
-        -fpass-plugin=$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so
-        -Xclang
+        -fpass-plugin=${HIKARI_PLUGIN}
+        -Xclang                             # -Xclang <arg>, -Xclang=<arg> - Pass <arg> to clang -cc1
         -load
-        -Xclang=$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so
+        -Xclang=${HIKARI_PLUGIN}
         -mllvm
-        -enable-strcry // string encryption flag
+        -enable-strcry # string encryption flag
+        
 )
 
-find_library( ...-lib     ... )
+# ...
 
-target_link_libraries( Project PRIVATE
-        ${...-lib}
-)
 ```
 
 **No examples porting to `Android.mk` and `Application.mk`**
