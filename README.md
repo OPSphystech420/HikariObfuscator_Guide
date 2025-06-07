@@ -232,7 +232,7 @@ android {
                 val obfArgs = listOf(
                     "-fvisibility=hidden",
                     "-fpass-plugin=$obfLibDir",
-                    "-Xclang",
+                    "-Xclang",                         // -Xclang <arg>, -Xclang=<arg> - Pass <arg> to clang -cc1
                     "-load",
                     "-Xclang",
                     obfLibDir,
@@ -273,10 +273,10 @@ android {
 
                 cFlags  "-fvisibility=hidden",
                         "-fpass-plugin=${obfLib}",
-                        "-Xclang", "-load", "-Xclang", "${obfLib}"
+                        "-Xclang", "-load", "-Xclang", "${obfLib}"  // -Xclang <arg>, -Xclang=<arg> - Pass <arg> to clang -cc1
                 cppFlags "-fvisibility=hidden",
                         "-fpass-plugin=${obfLib}",
-                        "-Xclang", "-load", "-Xclang", "${obfLib}"
+                        "-Xclang", "-load", "-Xclang", "${obfLib}"  // -Xclang <arg>, -Xclang=<arg> - Pass <arg> to clang -cc1
 
                 cppFlags "-mllvm", "-enable-strcry"  // string encryption flag
             }
