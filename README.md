@@ -219,10 +219,10 @@ cp    /your_path_to/HikariObfuscator_Guide/Hikari/build/Obfuscation/libHikari.so
 Example porting with cmake `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project
 ```gradle
 android {
-    ..
+    // ...
     ndkVersion = "29.0.13113456"
     ndkPath = "$ANDROID_SDK_ROOT/ndk/29.0.13113456-obf" // you must use our modified NDK here
-    ..
+    // ...
     defaultConfig {
         externalNativeBuild {
             cmake {
@@ -244,7 +244,7 @@ android {
             }
         }
     }
-    ..
+    // ...
 }
 ```
 
@@ -253,19 +253,19 @@ Example porting with cmake `app/build.gradle` and `app/src/main/cpp/CMakeLists.t
 in `app/build.gradle` specify
 ```gradle
 android {
-    ..
+    // ...
     ndkVersion = "29.0.13113456"
     ndkPath = "$ANDROID_SDK_ROOT/ndk/29.0.13113456-obf"
-    ..
+    // ...
 ```
 You have two options, you may load the plugin and specify the flags with **gradle cmake** (1) or you may do it in CMakeLists.txt **target_compile_options** (2).
 
 (1)
 ```gradle
 android {
-    ..
+    // ...
     defaultConfig {
-        ..
+        // ...
         externalNativeBuild {
             cmake {
                 def ndkDir = android.ndkDirectory
@@ -282,7 +282,7 @@ android {
             }
         }
     }
-    ..
+    // ...
 }
 ```
 
@@ -297,10 +297,10 @@ cmake_minimum_required(VERSION 3.4.1)
 project(ProjectNative LANGUAGES C CXX)
 
 # your Project set
-...
+# ...
 
 # your Project include_directories and add_library 
-...
+# ...
 
 set(HIKARI_PLUGIN
         "${ANDROID_NDK}/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"     # set path
@@ -308,7 +308,7 @@ set(HIKARI_PLUGIN
 
 target_compile_options(Project PRIVATE
         # your C & C++ flags
-        ...
+        # ...
 
         # Obfuscation flags
         -fvisibility=hidden
@@ -321,7 +321,7 @@ target_compile_options(Project PRIVATE
         
 )
 
-...
+# ...
 
 ```
 
