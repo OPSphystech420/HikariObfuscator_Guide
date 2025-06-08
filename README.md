@@ -216,7 +216,7 @@ You may move `libHikari.so` to your project directory or store within `27.0.1207
 cp    /your_path_to/HikariObfuscator_Guide/Hikari/build/Obfuscation/libHikari.so    $ANDROID_SDK_ROOT/ndk/27.0.12077973-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/
 ```
 
-Example porting with cmake `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project
+**Example porting with cmake `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project**
 ```gradle
 android {
     // ...
@@ -249,7 +249,7 @@ android {
 }
 ```
 
-Example porting with cmake `app/build.gradle` and `app/src/main/cpp/CMakeLists.txt`, Android Java Native C++ project
+**Example porting with cmake `app/build.gradle` and `app/../cpp/CMakeLists.txt`, Android Java Native C++ project**
 
 in `app/build.gradle` specify
 ```gradle
@@ -327,7 +327,7 @@ target_compile_options(Project PRIVATE
 
 ```
 
-**Example porting to NDK-Build (`Android.mk` and `Application.mk`)**
+**Example porting with NDK-Build (`app/build.gradle` and `app/../jni/Android.mk`)**
 
 As in previous example, if we follow (1), `ndkBuild` will cause
 > [!CAUTION]
