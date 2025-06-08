@@ -249,7 +249,7 @@ android {
 }
 ```
 
-**Example porting with cmake `app/build.gradle` and `app/src/main/cpp/CMakeLists.txt`, Android Java Native C++ project**
+**Example porting with cmake `app/build.gradle` and `app/../cpp/CMakeLists.txt`, Android Java Native C++ project**
 
 in `app/build.gradle` specify
 ```gradle
@@ -327,7 +327,7 @@ target_compile_options(Project PRIVATE
 
 ```
 
-**Example porting to NDK-Build (`Android.mk` and `Application.mk`)**
+**Example porting with NDK-Build (`app/build.gradle` and `app/../jni/Android.mk`)**
 
 As in previous example, if we follow (1), `ndkBuild` will cause
 > [!CAUTION]
