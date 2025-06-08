@@ -220,8 +220,9 @@ Example porting with cmake `build.gradle.kts (Module :app)`, Android Kotlin Nati
 ```gradle
 android {
     // ...
+    val sdkDir = android.sdkDirectory
     ndkVersion = "27.0.12077973"
-    ndkPath = "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf" // you must use our modified NDK here
+    ndkPath = "$sdkDir/ndk/27.0.12077973-obf" // you must use our modified NDK here
     // ...
     defaultConfig {
         externalNativeBuild {
@@ -254,8 +255,9 @@ in `app/build.gradle` specify
 ```gradle
 android {
     // ...
+    def sdkDir = android.sdkDirectory
     ndkVersion = "27.0.12077973"
-    ndkPath = "$ANDROID_SDK_ROOT/ndk/27.0.12077973-obf"
+    ndkPath = "$sdkDir/ndk/27.0.12077973-obf"
     // ...
 ```
 You have two options, you may load the plugin and specify the flags with **gradle cmake** (1) or you may do it in CMakeLists.txt **target_compile_options** (2).
