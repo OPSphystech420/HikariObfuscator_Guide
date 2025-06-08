@@ -216,7 +216,7 @@ You may move `libHikari.so` to your project directory or store within `29.0.1311
 cp    /your_path_to/HikariObfuscator_Guide/Hikari/build/Obfuscation/libHikari.so    $ANDROID_SDK_ROOT/ndk/29.0.13113456-obf/toolchains/llvm/prebuilt/darwin-x86_64/lib/
 ```
 
-Example porting with cmake `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project
+**Example porting with cmake `build.gradle.kts (Module :app)`, Android Kotlin Native C++ project**
 ```gradle
 android {
     // ...
@@ -249,7 +249,7 @@ android {
 }
 ```
 
-Example porting with cmake `app/build.gradle` and `app/src/main/cpp/CMakeLists.txt`, Android Java Native C++ project
+**Example porting with cmake `app/build.gradle` and `app/src/main/cpp/CMakeLists.txt`, Android Java Native C++ project**
 
 in `app/build.gradle` specify
 ```gradle
@@ -327,12 +327,84 @@ target_compile_options(Project PRIVATE
 
 ```
 
-**No examples porting to `Android.mk` and `Application.mk`**
+**Example porting to NDK-Build (`Android.mk` and `Application.mk`)**
 
-`ndkBuild` will cause
+As in previous example, if we follow (1), `ndkBuild` will cause
 > [!CAUTION]
 >```error
 > GNUMAKE: Expected exactly one source file in compile step
 >```
-Not resolved
+
+To resolve such issue, you must choose `-Xclang=<arg>` notation, for example 
+```gradle
+android {
+    // ...
+    def sdkDir = android.sdkDirectory
+    ndkVersion = "29.0.13113456"
+    ndkPath = "$sdkDir/ndk/29.0.13113456-obf"
+    // ...
+    defaultConfig {
+        // ...
+        externalNativeBuild {
+            ndkBuild {         // ndkBuild
+
+                def ndkDir = android.ndkDirectory
+                def obfLib = "$ndkDir/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"
+
+                cFlags  "-fvisibility=hidden",
+                        "-fpass-plugin=${obfLib}",
+                        "-Xclang", "-load", "-Xclang=${obfLib}" //  -Xclang=<arg>
+                cppFlags "-fvisibility=hidden",
+                        "-fpass-plugin=${obfLib}",
+                        "-Xclang", "-load", "-Xclang=${obfLib}" //  -Xclang=<arg>
+
+                cppFlags "-mllvm", "-enable-strcry"
+            }
+        }
+    }
+    // ...
+}
+```
+In cases you are willing to use `Android.mk` to specify the flags 
+```mk
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+
+# Your static libraries include
+# ...
+
+# Your library
+include $(CLEAR_VARS)
+LOCAL_MODULE    := Project
+
+# Your C, CPP, LD... flags 
+# LOCAL_CFLAGS := ...
+# LOCAL_CPPFLAGS := ...
+# ...
+
+# Obfuscation
+HIKARI_PLUGIN := $(NDK_ROOT)/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so
+
+LOCAL_CFLAGS   += -fpass-plugin=$(HIKARI_PLUGIN) -Xclang -load
+LOCAL_CFLAGS   += -Xclang=$(HIKARI_PLUGIN)                         #  -Xclang=<arg>
+LOCAL_CFLAGS   += -mllvm -enable-strcry
+
+LOCAL_CPPFLAGS += -fpass-plugin=$(HIKARI_PLUGIN) -Xclang -load
+LOCAL_CPPFLAGS += -Xclang=$(HIKARI_PLUGIN)                         #  -Xclang=<arg>
+LOCAL_CPPFLAGS += -mllvm -enable-strcry
+
+# Your includes
+LOCAL_C_INCLUDES += $(LOCAL_PATH)
+# ...
+
+# Your files to compile
+# LOCAL_SRC_FILES := ...
+
+# Your static libraries
+# LOCAL_STATIC_LIBRARIES := ...
+
+include $(BUILD_SHARED_LIBRARY)
+```
+
+---
 
