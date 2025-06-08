@@ -327,12 +327,16 @@ target_compile_options(Project PRIVATE
 
 ```
 
-**No examples porting to `Android.mk` and `Application.mk`**
+**Example porting to NDK-Build (`Android.mk` and `Application.mk`)**
 
-`ndkBuild` will cause
+As in previous example, if we follow (1), `ndkBuild` will cause
 > [!CAUTION]
 >```error
 > GNUMAKE: Expected exactly one source file in compile step
 >```
-Not resolved
+
+To resolve such issue, you must choose `-Xclang=<arg>` notation
+```
+
+```
 
