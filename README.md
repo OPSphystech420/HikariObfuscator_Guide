@@ -335,8 +335,75 @@ As in previous example, if we follow (1), `ndkBuild` will cause
 > GNUMAKE: Expected exactly one source file in compile step
 >```
 
-To resolve such issue, you must choose `-Xclang=<arg>` notation
+To resolve such issue, you must choose `-Xclang=<arg>` notation, for example 
+```gradle
+android {
+    // ...
+    def sdkDir = android.sdkDirectory
+    ndkVersion = "27.0.12077973"
+    ndkPath = "$sdkDir/ndk/27.0.12077973-obf"
+    // ...
+    defaultConfig {
+        // ...
+        externalNativeBuild {
+            ndkBuild {         // ndkBuild
+
+                def ndkDir = android.ndkDirectory
+                def obfLib = "$ndkDir/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so"
+
+                cFlags  "-fvisibility=hidden",
+                        "-fpass-plugin=${obfLib}",
+                        "-Xclang", "-load", "-Xclang=${obfLib}" //  -Xclang=<arg>
+                cppFlags "-fvisibility=hidden",
+                        "-fpass-plugin=${obfLib}",
+                        "-Xclang", "-load", "-Xclang=${obfLib}" //  -Xclang=<arg>
+
+                cppFlags "-mllvm", "-enable-strcry"
+            }
+        }
+    }
+    // ...
+}
+```
+In cases you are willing to use `Android.mk` to specify the flags 
+```mk
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+
+# Your static libraries include
+# ...
+
+# Your library
+include $(CLEAR_VARS)
+LOCAL_MODULE    := Project
+
+# Your C, CPP, LD... flags 
+# LOCAL_CFLAGS := ...
+# LOCAL_CPPFLAGS := ...
+# ...
+
+# Obfuscation
+HIKARI_PLUGIN := $(NDK_ROOT)/toolchains/llvm/prebuilt/darwin-x86_64/lib/libHikari.so
+
+LOCAL_CFLAGS   += -fpass-plugin=$(HIKARI_PLUGIN) -Xclang -load
+LOCAL_CFLAGS   += -Xclang=$(HIKARI_PLUGIN)                         #  -Xclang=<arg>
+LOCAL_CFLAGS   += -mllvm -enable-strcry
+
+LOCAL_CPPFLAGS += -fpass-plugin=$(HIKARI_PLUGIN) -Xclang -load
+LOCAL_CPPFLAGS += -Xclang=$(HIKARI_PLUGIN)                         #  -Xclang=<arg>
+LOCAL_CPPFLAGS += -mllvm -enable-strcry
+
+# Your includes
+LOCAL_C_INCLUDES += $(LOCAL_PATH)
+# ...
+
+# Your files to compile
+# LOCAL_SRC_FILES := ...
+
+# Your static libraries
+# LOCAL_STATIC_LIBRARIES := ...
+
+include $(BUILD_SHARED_LIBRARY)
 ```
 
-```
-
+---
