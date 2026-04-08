@@ -1,4 +1,4 @@
-## Hikari is an LLVM IR-level obfuscator implemented as a Clang/LLVM pass plugin.
+## Hikari is an LLVM IR-level obfuscator implemented as a Clang/LLVM pass plugin
 
 In short, Hikari is loaded into the compiler during the build process and transforms LLVM IR before final code generation. This makes it possible to apply obfuscation at compile time, without manually rewriting your source code.
 
