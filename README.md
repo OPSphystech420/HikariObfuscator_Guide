@@ -5,7 +5,9 @@ In short, Hikari is loaded into the compiler during the build process and transf
 > [!NOTE]
 > In this repo I provide a **step-by-step** guide to start off with obfuscation in your **iOS/Android** projects, which will be enough to protect your binary from *skid* or *vibe-code* reverse engineering 
 
-Supports **Windows-native** set up now!
+Supports newer LLVMs!
+
+Supports **Windows-native** set up!
 
 > [!WARNING]
 > For other (industrial) purposes I do **not** recommend this free to use obfuscator as it's experimental and outdated. I do **not** take actions for your vulnerabilities.
@@ -13,8 +15,6 @@ Supports **Windows-native** set up now!
 > You may aswell check out [O-MVLL/dProtect](https://obfuscator.re/) - maintained mobile open-source obfuscator (harder to set up, but more functionality and convenient use)
 >
 > Or check out other comercial and free obfuscators [here](https://obfuscator.re/resources/)
-
-
 
 
 
