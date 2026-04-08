@@ -39,7 +39,7 @@ And more...
 
 ## Guide
 
-The guides are split into branches:
+The build guides are split into branches:
 
 ### iOS - Build Hikari with Xcode Toolchain / [Theos](https://theos.dev/)
   - [LLVM-16](https://github.com/OPSphystech420/HikariObfuscator_Guide/tree/build/ios-xcode-llvm16)
@@ -52,6 +52,10 @@ The guides are split into branches:
 
 - Windows-Native
   - [NDK r29 (LLVM-20 Pass)](https://github.com/OPSphystech420/HikariObfuscator_Guide/tree/build/windows-native/android-ndk-llvm20).
+
+
+### Flags and usage read [here](FLAGS.md)
+
 
 ---
 
