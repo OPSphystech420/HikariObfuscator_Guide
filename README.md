@@ -35,11 +35,11 @@ And more...
 
 The guides are split into branches:
 
-### iOS - Build Hikari Obfuscation with Xcode Toolchain / [Theos](https://theos.dev/)
+### iOS - Build Hikari with Xcode Toolchain / [Theos](https://theos.dev/)
   - [LLVM-16](https://github.com/OPSphystech420/HikariObfuscator_Guide/tree/build/ios-xcode-llvm16)
 
 
-### Android - Build and port Hikari Obfuscation Plugin to [Android Studio](https://developer.android.com/studio?hl=en) (Very detailed guide)
+### Android - Build and port Hikari Plugin to [Android Studio](https://developer.android.com/studio?hl=en) (Very detailed guide)
 - MacOS/Linux
   - [NDK r27 (LLVM-18 Pass)](https://github.com/OPSphystech420/HikariObfuscator_Guide/tree/build/android-ndk-llvm18);
   - [NDK r29 (LLVM-20 Pass)](https://github.com/OPSphystech420/HikariObfuscator_Guide/tree/build/android-ndk-llvm20).
