@@ -1,7 +1,6 @@
 ## Hikari is an LLVM IR-level obfuscator implemented as a Clang/LLVM pass plugin.
 
-In short, Hikari is loaded into the compiler during the build process and transforms LLVM IR before final code generation.  
-This makes it possible to apply obfuscation at compile time, without manually rewriting your source code.
+In short, Hikari is loaded into the compiler during the build process and transforms LLVM IR before final code generation. This makes it possible to apply obfuscation at compile time, without manually rewriting your source code.
 
 > [!NOTE]
 > In this repo I provide a **step-by-step** guide to start off with obfuscation in your **iOS/Android** projects, which will be enough to protect your binary from *skid* or *vibe-code* reverse engineering 
