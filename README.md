@@ -6,12 +6,18 @@ This makes it possible to apply obfuscation at compile time, without manually re
 > [!NOTE]
 > In this repo I provide a **step-by-step** guide to start off with obfuscation in your **iOS/Android** projects, which will be enough to protect your binary from *skid* or *vibe-code* reverse engineering 
 
+Supports **Windows-native** set up now!
+
 > [!WARNING]
 > For other (industrial) purposes I do **not** recommend this free to use obfuscator as it's experimental and outdated. I do **not** take actions for your vulnerabilities.
 >
 > You may aswell check out [O-MVLL/dProtect](https://obfuscator.re/) - maintained mobile open-source obfuscator (harder to set up, but more functionality and convenient use)
 >
 > Or check out other comercial and free obfuscators [here](https://obfuscator.re/resources/)
+
+
+
+
 
 ## This guide currently covers functionality such as:
 
